@@ -37,9 +37,7 @@ const SignInForm = () => {
       password: "",
     },
   });
-
   const { signIn } = useAuthStore();
-
   const navigate = useNavigate();
 
   const verticalFields = [

@@ -14,7 +14,6 @@ export const authService = {
       { firstName, lastName, username, email, password },
       { withCredentials: true },
     );
-
     return res.data;
   },
 
@@ -24,13 +23,16 @@ export const authService = {
       { username, password },
       { withCredentials: true },
     );
-
     return res.data; //access token
   },
 
   signOut: async () => {
     const res = await api.post("/auth/signout", {}, { withCredentials: true });
-
     return res.data;
+  },
+
+  fetchProfile: async () => {
+    const res = await api.get("/profile", { withCredentials: true });
+    return res.data.user;
   },
 };
