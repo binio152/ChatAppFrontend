@@ -23,7 +23,8 @@ export const authService = {
       { username, password },
       { withCredentials: true },
     );
-    return res.data; //access token
+    console.log(res);
+    return res.data.accessToken;
   },
 
   signOut: async () => {
@@ -32,7 +33,12 @@ export const authService = {
   },
 
   fetchProfile: async () => {
-    const res = await api.get("/profile", { withCredentials: true });
+    const res = await api.get("/users/profile", { withCredentials: true });
     return res.data.user;
+  },
+
+  refresh: async () => {
+    const res = await api.post("/auth/refresh", { withCredentials: true });
+    return res.data.accessToken;
   },
 };

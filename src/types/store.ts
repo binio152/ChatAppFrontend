@@ -31,5 +31,5 @@ export interface AuthState {
   signIn: ({ username, password }: SignInSchema) => Promise<void>;
   signOut: () => Promise<void>;
   fetchProfile: () => Promise<void>;
-  //   refresh: () => Promise<void>;
+  refresh: () => Promise<void>;
 }

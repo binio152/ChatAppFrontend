@@ -43,8 +43,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   signIn: async ({ username, password }) => {
     try {
       set({ loading: true });
-      const { accessToken } = await authService.signIn({ username, password });
-
+      const accessToken = await authService.signIn({ username, password });
+      
       get().setAccessToken(accessToken);
       await get().fetchProfile();
       toast.success("Đăng nhập tài khoản thành công!");
@@ -62,9 +62,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       set({ loading: true });
       await authService.signOut();
-      get().clearState();
 
       toast.success("Đăng xuất tài khoản thành công!");
+      get().clearState();
     } catch (err) {
       toast.error(
         "Đăng xuất tài khoản không thành công! Xin hãy vui lòng thử lại.",
@@ -85,6 +85,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         "Đăng xuất tài khoản không thành công! Xin hãy vui lòng thử lại.",
       );
       console.log(err);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  refresh: async () => {
+    try {
+      set({ loading: true });
+      const accessToken = await authService.refresh();
+      get().setAccessToken(accessToken);
+
+      const { user, fetchProfile } = get();
+      if (!user) await fetchProfile();
+    } catch (err) {
+      toast.error("loi khi refresh access token");
+      console.log(err);
+      get().clearState();
     } finally {
       set({ loading: false });
     }
