@@ -11,6 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const signUpSchema = z.object({
   username: z
@@ -46,6 +48,8 @@ const SignUpForm = () => {
       password: "",
     },
   });
+  const { signUp } = useAuthStore();
+  const navigate = useNavigate();
 
   const horizontalFields = [
     {
@@ -80,10 +84,13 @@ const SignUpForm = () => {
   ] as const;
 
   const onSubmit = async (data: signUpSchemaType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    toast.success("Submitting");
-    form.reset();
+    try {
+      await signUp(data);
+      navigate("/signin");
+    } catch (err) {
+      console.log(err);
+      toast.error("Lỗi sảy ra khi đăng ký!");
+    }
   };
 
   return (

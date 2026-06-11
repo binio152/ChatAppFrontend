@@ -11,6 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const signInSchema = z.object({
   username: z
@@ -36,6 +38,10 @@ const SignInForm = () => {
     },
   });
 
+  const { signIn } = useAuthStore();
+
+  const navigate = useNavigate();
+
   const verticalFields = [
     {
       name: "username",
@@ -50,10 +56,14 @@ const SignInForm = () => {
   ] as const;
 
   const onSubmit = async (data: signInSchemaType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    toast.success("Submitting");
-    form.reset();
+    try {
+      const res = await signIn(data);
+      console.log(res);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+      toast.error("Lỗi sảy ra khi đăng nhập!");
+    }
   };
 
   return (

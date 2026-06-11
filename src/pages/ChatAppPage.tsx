@@ -1,9 +1,27 @@
-import React from 'react'
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const ChatAppPage = () => {
-  return (
-    <div>ChatAppPage</div>
-  )
-}
+  const navigate = useNavigate();
+  const { signOut } = useAuthStore();
+  const logOut = async () => {
+    try {
+      await signOut();
+      navigate("/signin");
+    } catch {
+      toast.error("loi say ra khi dang xuat");
+    }
+  };
 
-export default ChatAppPage
+  return (
+    <div>
+      <h1>Chat App Page</h1>
+      <button className="border-2 rounded-xl" onClick={logOut}>
+        Logout
+      </button>
+    </div>
+  );
+};
+
+export default ChatAppPage;
